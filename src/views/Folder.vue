@@ -1,10 +1,12 @@
 <template>
   <div>
-    <h3>Files in {{ folderName }}:</h3>
-    <table v-if="files.length">
+    <h3 class="folder-title">Files in {{ folderName }}:</h3>
+
+    <table v-if="files.length" class="files-table">
       <thead>
         <tr>
           <th>File Name</th>
+          <th>Preview</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -12,16 +14,31 @@
         <tr v-for="file in files" :key="file.name">
           <td>{{ file.name }}</td>
           <td>
-            <a :href="`${apiUrl}${folderName}/${file.name}`" download>
+            <router-link
+              :to="`/data/${folderName}/${file.name}`"
+              class="preview-link"
+            >
+              Preview
+            </router-link>
+          </td>
+          <td>
+            <a
+              :href="`${apiUrl}${folderName}/${file.name}`"
+              download
+              class="download-link"
+            >
               Download
             </a>
           </td>
         </tr>
       </tbody>
     </table>
+
     <p v-else>No files found in this folder.</p>
+
     <br />
-    <router-link :to="`/data`"> Back to Data</router-link>
+
+    <router-link :to="`/data`" class="back-link">Back to Data</router-link>
   </div>
 </template>
 
@@ -46,3 +63,63 @@ onMounted(() => {
     .catch((error) => console.error("Error loading files:", error));
 });
 </script>
+
+<style scoped>
+.folder-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.files-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.files-table th,
+.files-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.files-table th {
+  background-color: #f7f7f7;
+  font-weight: bold;
+}
+
+.files-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.files-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.preview-link,
+.download-link {
+  text-decoration: none;
+  color: #3498db;
+}
+
+.preview-link:hover,
+.download-link:hover {
+  text-decoration: underline;
+}
+
+.back-link {
+  display: inline-block;
+  padding: 8px 16px;
+  margin-top: 10px;
+  background-color: #2ecc71;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.back-link:hover {
+  background-color: #27ae60;
+}
+</style>
