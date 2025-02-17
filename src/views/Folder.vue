@@ -12,16 +12,16 @@
         <tr v-for="file in files" :key="file.name">
           <td>{{ file.name }}</td>
           <td>
-            <router-link :to="`/data/${folderName}/${file.name}`">
-              Preview
-            </router-link>
-            |
-            <a :href="`${apiUrl}${file.url}`" download> Download </a>
+            <a :href="`${apiUrl}${folderName}/${file.name}`" download>
+              Download
+            </a>
           </td>
         </tr>
       </tbody>
     </table>
-    <p v-else>Loading files...</p>
+    <p v-else>No files found in this folder.</p>
+    <br />
+    <router-link :to="`/data`"> Back to Data</router-link>
   </div>
 </template>
 
@@ -29,20 +29,17 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
-const route = useRoute();
-const files = ref([]);
-const folderName = route.params.folder;
-const folderPath = `${import.meta.env.VITE_API_URL}/data`; // Move this outside the template
-
-// Add a computed property for the URL
 const apiUrl = import.meta.env.VITE_API_URL;
+const folderName = useRoute().params.folder;
+const files = ref([]);
 
+// Fetch files for the selected folder
 onMounted(() => {
-  fetch(`${folderPath}/fileList.json`)
+  fetch(`${apiUrl}fileList.json`)
     .then((response) => response.json())
     .then((data) => {
       const folder = data.find((item) => item.folder === folderName);
-      if (folder) {
+      if (folder && folder.files) {
         files.value = folder.files;
       }
     })

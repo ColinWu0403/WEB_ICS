@@ -8,6 +8,7 @@
         </router-link>
       </li>
     </ul>
+    <router-link :to="`/`"> Back to Home Page</router-link>
   </div>
 </template>
 
