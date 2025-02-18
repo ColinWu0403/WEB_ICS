@@ -6,6 +6,6 @@
       Corporate Partners Project with PepsiCo
     </p>
     <p>Navigate to the data by clicking the link below:</p>
-    <router-link to="/data">View Data</router-link>
+    <router-link to="/data/">View Data</router-link>
   </div>
 </template>
